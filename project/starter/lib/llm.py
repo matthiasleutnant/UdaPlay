@@ -1,6 +1,7 @@
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
 import os
+import logging
 from dotenv import load_dotenv
 from openai import OpenAI
 from lib.messages import (
@@ -11,6 +12,9 @@ from lib.messages import (
     UserMessage,
 )
 from lib.tooling import Tool
+
+
+logger = logging.getLogger(__name__)
 
 
 class LLM:
@@ -66,6 +70,7 @@ class LLM:
                response_format: BaseModel = None,) -> AIMessage:
         messages = self._convert_input(input)
         payload = self._build_payload(messages)
+        logger.debug("LLM request: model=%s temperature=%s messages=%s", self.model, self.temperature, payload["messages"])
         if response_format:
             payload.update({"response_format": response_format})
             response = self.client.beta.chat.completions.parse(**payload)
@@ -82,8 +87,15 @@ class LLM:
                 total_tokens=response.usage.total_tokens
             )
 
-        return AIMessage(
+        result = AIMessage(
             content=message.content,
             tool_calls=message.tool_calls,
             token_usage=token_usage
         )
+        logger.debug(
+            "LLM response: content=%s tool_calls=%s token_usage=%s",
+            result.content,
+            result.tool_calls,
+            result.token_usage,
+        )
+        return result

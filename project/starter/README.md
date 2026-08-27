@@ -41,16 +41,14 @@ Required Tools to Implement:
 Create a `.env` file with the following API keys:
 ```
 OPENAI_API_KEY="YOUR_KEY"
+OPENAI_BASE_URL="https://openai.vocareum.com/v1"
 CHROMA_OPENAI_API_KEY="YOUR_KEY"
 TAVILY_API_KEY="YOUR_KEY"
 ```
 
 ### Project Dependencies
 - Python 3.11+
-- ChromaDB
-- OpenAI
-- Tavily
-- dotenv
+- Packages from `requirements.txt`
 
 ### Directory Structure
 ```
@@ -68,12 +66,32 @@ project/
 
 ## Getting Started
 
-1. Create and activate a virtual environment
-2. Install required dependencies
+1. Create and activate a virtual environment in the repository root
+2. Install required dependencies from `Code\project\starter\requirements.txt`
 3. Set up your `.env` file with necessary API keys
 4. Follow the notebooks in order:
    - Complete Part 1 to set up your vector database
    - Complete Part 2 to implement the AI agent
+
+### Windows Setup
+Run these commands from the repository root:
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r Code\project\starter\requirements.txt
+```
+
+### IntelliJ / PyCharm
+To work on the notebooks and the `lib` package in JetBrains IDEs:
+
+1. Open the repository root as the project.
+2. Select `.venv\Scripts\python.exe` as the project interpreter.
+3. Open notebooks from `Code\project\starter`.
+4. Use the `.venv` kernel when the IDE asks for a Jupyter kernel.
+
+The IDE module is configured so `Code\project\starter` is treated as the Python source root, which keeps imports like `from lib...` resolvable inside the notebooks and library files.
 
 ## Testing Your Implementation
 
